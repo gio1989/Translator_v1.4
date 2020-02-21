@@ -233,8 +233,14 @@ namespace Translator
                         {
                             answer += item.InnerText + Environment.NewLine + Environment.NewLine;
                         }
+
+                        finalAnswer = Environment.NewLine + answer;
                     }
-                    finalAnswer = Environment.NewLine + answer;
+                    else
+                    {
+                        finalAnswer = "ასეთი სიტყვა ვერ მოიძებნა";
+                    }
+
                     txtBoxMain.Text = finalAnswer;
                 }
             }
