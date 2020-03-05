@@ -4,7 +4,8 @@
         xmlns:local="clr-namespace:Translator"
         Title="MainWindow" Height="422" Width="322" ResizeMode="NoResize" WindowStyle="None" 
         MouseDown="WindowMouseDown" BorderThickness="1" 
-        KeyDown="Window_KeyDown" Icon="Resources/Translate.ico" BorderBrush="#FF727272" AllowsTransparency="True" Opacity="0.8" Background="#FFECF77B" >
+        KeyDown="Window_KeyDown" Icon="Resources/Translate.ico" BorderBrush="#FF727272" AllowsTransparency="True" Opacity="0.8" Background="#FFECF77B"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit">
 
     <Window.Resources>
         <Style x:Key="OnOffToggleImageStyle" TargetType="ToggleButton">
@@ -27,6 +28,7 @@
         </Style>
         <local:ClipboardMonitor x:Key="ClipWatch" />
     </Window.Resources>
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="22"/>
@@ -71,12 +73,12 @@
                 <RowDefinition Height="*"></RowDefinition>
             </Grid.RowDefinitions>
 
-            <ComboBox x:Name="SiteType" Margin="0,5,0,5"  HorizontalAlignment="Stretch" SelectionChanged="SiteType_SelectionChanged" VerticalAlignment="Top">
+            <!--<ComboBox x:Name="SiteType" Margin="0,5,0,5"  HorizontalAlignment="Stretch" SelectionChanged="SiteType_SelectionChanged" VerticalAlignment="Top">
                 <ComboBoxItem   IsSelected="True" Content="translate.ge" />
                 <ComboBoxItem  Content="translate.voov.me" />
-            </ComboBox>
+            </ComboBox>-->
             <TextBox x:Name="labelMain"  Grid.Row="1" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top"   IsReadOnly="True" UseLayoutRounding="False" Background="{x:Null}" Height="25" Width="300" VerticalScrollBarVisibility="Auto" Foreground="#990000" FontWeight="Bold" FontSize="13"  />
-            <TextBox x:Name="txtBoxMain" Grid.Row="2"  HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Margin="0,0,0,0"  IsReadOnly="True"  UseLayoutRounding="False" Background="{x:Null}" Height="382" Width="300" VerticalScrollBarVisibility="Auto" Grid.ColumnSpan="2" />
+            <TextBox x:Name="txtBoxMain" Grid.Row="2"  HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Margin="0,0,0,0"  IsReadOnly="True"  UseLayoutRounding="False" Background="{x:Null}" Width="300" VerticalScrollBarVisibility="Auto" Grid.ColumnSpan="2" />
         </Grid>
 
 

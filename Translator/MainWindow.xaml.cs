@@ -5,7 +5,6 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
 using translator.classes;
@@ -54,6 +53,8 @@ namespace Translator
             {
                 try
                 {
+                    txtBoxMain.Text = "ასეთი სიტყვა ვერ მოიძებნა";
+
                     //if ((_lastClipboardtext != null && _lastClipboardtext.Equals(_clipboardMonitor.ClipboardText)) || (_clipboardMonitor.ClipboardText.Length > 200))
                     //    return;
 
@@ -63,16 +64,19 @@ namespace Translator
                     _lastClipboardtext = _clipboardMonitor.ClipboardText;
                     //სასვენი ნიშნების მოცილება ტექსტიდან
                     _clipboardMonitor.ClipboardText = _clipboardMonitor.ClipboardText.Where(c => !char.IsPunctuation(c)).Aggregate("", (current, c) => current + c);
-                    var selectedItem = SiteType.SelectedItem as ComboBoxItem;
-                    if (selectedItem.Content.ToString() == "translate.ge")
-                        TranslateByTranslateGe(_clipboardMonitor.ClipboardText);
-                    else
-                        TranslateByVoov(_clipboardMonitor.ClipboardText);
+                    string translatedText = string.Empty;
+
+                    translatedText = TranslateByTranslateGe(_clipboardMonitor.ClipboardText);
+
+                    if (string.IsNullOrEmpty(translatedText))
+                        translatedText = TranslateByVoov(_clipboardMonitor.ClipboardText);
+
+                    labelMain.Text = _clipboardMonitor.ClipboardText;
+                    txtBoxMain.Text = !string.IsNullOrEmpty(translatedText) ? translatedText : txtBoxMain.Text;
+
                 }
-                catch (Exception)
+                catch
                 {
-                    txtBoxMain.Text = "ასეთი სიტყვა ვერ მოიძებნა";
-                    labelMain.Text = "";
                 }
             }
         }
@@ -198,17 +202,10 @@ namespace Translator
             HelperMethods.WriteLoginHelperObjectJson(jsonObject);
         }
 
-        private void SiteType_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private string TranslateByVoov(string selectedText)
         {
-            if (txtBoxMain != null && labelMain != null)
-            {
-                txtBoxMain.Text = string.Empty;
-                labelMain.Text = string.Empty;
-            }
-        }
+            var finalAnswer = string.Empty;
 
-        private void TranslateByVoov(string selectedText)
-        {
             try
             {
                 var trimmedParam = !string.IsNullOrEmpty(selectedText) ? selectedText.Trim() : string.Empty;
@@ -223,7 +220,7 @@ namespace Translator
                     responceText = sr.ReadToEnd().Trim().ToString();
                     HtmlDocument doc = new HtmlDocument();
                     doc.LoadHtml(responceText);
-                    var finalAnswer = "";
+
                     var answer = "";
                     var itemList = doc.DocumentNode.SelectNodes("//ul[contains(@class, 'sense-entry')]");
 
@@ -235,24 +232,26 @@ namespace Translator
                         }
 
                         finalAnswer = Environment.NewLine + answer;
-                    }
-                    else
-                    {
-                        finalAnswer = "ასეთი სიტყვა ვერ მოიძებნა";
-                    }
 
-                    txtBoxMain.Text = finalAnswer;
+                        if (!string.IsNullOrEmpty(finalAnswer))
+                        {
+                            finalAnswer += "-----------------";
+                            finalAnswer += Environment.NewLine + "translate.voov.me";
+                        }
+                    }
                 }
             }
-            catch (Exception ex)
+            catch
             {
-                txtBoxMain.Text = "ასეთი სიტყვა ვერ მოიძებნა";
-                labelMain.Text = "";
             }
+
+            return finalAnswer;
         }
 
-        private void TranslateByTranslateGe(string selectedText)
+        private string TranslateByTranslateGe(string selectedText)
         {
+            string responseString = string.Empty;
+
             try
             {
                 var trimmedParam = !string.IsNullOrEmpty(selectedText) ? selectedText.Trim() : string.Empty;
@@ -267,8 +266,6 @@ namespace Translator
                     responceText = sr.ReadToEnd().Trim().ToString();
                     var parseTree = JsonConvert.DeserializeObject<Rootobject>(responceText);
 
-                    string responseString = string.Empty;
-
                     if (parseTree != null && parseTree.Rows != null && parseTree.Rows.Any())
                     {
                         foreach (var responseObject in parseTree.Rows)
@@ -279,20 +276,16 @@ namespace Translator
                             responseString += Environment.NewLine;
                         }
 
-                        txtBoxMain.Text = responseString;
-                    }
-                    else
-                    {
-                        txtBoxMain.Text = "ასეთი სიტყვა ვერ მოიძებნა";
-                        labelMain.Text = string.Empty;
+                        if (!string.IsNullOrEmpty(responseString))
+                            responseString += "translate.ge";
                     }
                 }
             }
-            catch (Exception ex)
+            catch
             {
-                txtBoxMain.Text = "ასეთი სიტყვა ვერ მოიძებნა";
-                labelMain.Text = string.Empty;
             }
+
+            return responseString;
         }
 
 
