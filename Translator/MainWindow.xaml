@@ -4,7 +4,7 @@
         xmlns:local="clr-namespace:Translator"
         Title="MainWindow" Height="422" Width="322" ResizeMode="NoResize" WindowStyle="None" 
         MouseDown="WindowMouseDown" BorderThickness="1" 
-        KeyDown="Window_KeyDown" Icon="Resources/Translate.ico" BorderBrush="#FF727272" AllowsTransparency="True" Opacity="0.8" Background="#FFECF77B"
+        KeyDown="Window_KeyDown" Icon="Resources/Translate.ico" BorderBrush="#FF727272" AllowsTransparency="False" Opacity="0.8" Background="#FFECF77B"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit">
 
     <Window.Resources>
